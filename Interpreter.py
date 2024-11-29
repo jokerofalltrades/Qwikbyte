@@ -31,15 +31,17 @@ def assignment(piece, vars, varValues):
                 sys.exit()
         else:
             try:
-                if int(piece[comma+1:len(piece)]) == float(piece[comma+1:len(piece)]):
-                    varValues.append(int(piece[comma+1:len(piece)]))
-                else:
-                    varValues.append(float(piece[comma+1:len(piece)]))
+                varValues.append(int(piece[comma+1:len(piece)]))
             except ValueError:
-                print(f"Error Code 4: Error on line {i+1}, variable declaration is missing correct syntax. use ' ' to define a string and a # to define true or false.")
+                try:
+                    varValues.append(float(piece[comma+1:len(piece)]))
+                except ValueError:
+                    print(f"Error Code 4: Error on line {i+1}, variable declaration is missing correct syntax. use ' ' to define a string and a # to define true or false.")
+                    sys.exit()
     else:
         print(f"Error Code 2: Error on line {i+1}, missing ',' from variable declaration.")
         sys.exit()
+    return vars, varValues
 
 inputcode = input("Please input the qwikbyte code: ")
 code = inputcode.split(";")
@@ -67,9 +69,9 @@ for i, piece in enumerate(code):
         
 for i, piece in enumerate(code):
     if piece[0] == "=":
-        assignment(piece, vars, varValues)
+        vars, varValues, = assignment(piece, vars, varValues)
     elif piece[0] == "+":
         pass
     print(piece)
-print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
-print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
+#print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
+#print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
