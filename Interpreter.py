@@ -43,6 +43,13 @@ def assignment(piece, vars, varValues):
         sys.exit()
     return vars, varValues
 
+def addition(piece, vars, varValues):
+    comma = piece.find(",")
+    if comma != -1:
+        pass
+    else:
+        print(f"Error Code 5: Error on Missing ")
+
 inputcode = input("Please input the qwikbyte code: ")
 code = inputcode.split(";")
 for i, piece in enumerate(code):
@@ -68,9 +75,14 @@ for i, piece in enumerate(code):
     
         
 for i, piece in enumerate(code):
-    if piece[0] == "=":
-        vars, varValues, = assignment(piece, vars, varValues)
-    elif piece[0] == "+":
+    if type(piece) is not list:
+        if piece[0] == "=":
+            vars, varValues = assignment(piece, vars, varValues)
+        elif piece[0] == "+":
+            vars, varValues = addition(piece, vars, varValues)
+        elif piece[0:1] == ":=":
+            vars, varValues = updateValue(piece, vars, varValues)
+    else:
         pass
     print(piece)
 #print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
