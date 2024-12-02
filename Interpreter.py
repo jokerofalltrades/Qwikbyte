@@ -19,7 +19,7 @@ def assignment(piece, vars, varValues):
         else:
             print(f"Error Code 1: Error on line {i+1}, already defined variable being redefined.")
             sys.exit()
-        if piece[comma+1] == "'":
+        if piece[comma+1] == "'" and piece[len(comma)] == "'":
             varValues.append(piece[comma+2:find_nth_overlapping(piece,"'",2)])
         elif piece[comma+1] == "#":
             if piece[comma+2:len(piece)] == "1":
@@ -41,14 +41,56 @@ def assignment(piece, vars, varValues):
     else:
         print(f"Error Code 2: Error on line {i+1}, missing ',' from variable declaration.")
         sys.exit()
-    return vars, varValues
 
 def addition(piece, vars, varValues):
     comma = piece.find(",")
+    result = None
     if comma != -1:
-        pass
+        if piece[1:comma] in vars:
+            pass
+        elif piece[1] == "'":
+            if piece[comma+1] == "'" or piece[comma+1:len(piece)] in vars:
+                pass
+            else:
+                print(f"Error Code 7: Error on line {i+1}, cannot add string to other data types. If you are adding to a variable then the varaible does not exist.")
+                sys.exit()
+        else:
+            value1 = 0
+            try:
+                value1 = int(piece[1:comma])
+            except ValueError:
+                try:
+                    value1 = float(piece[1:comma])
+                except ValueError:
+                    print(f"Error Code 6: Error on line {i+1}, Invalid data type involved with addition.")
+                    sys.exit()
+            if piece[comma+1] == "'":
+                print(f"Error Code 8: Error on line {i+1}, Strings cannot be added to a number.")
+                sys.exit()
+            elif piece[comma+1:len(piece)] in vars:
+                try:
+                    result = varValues[vars.index(piece[comma+1:len(piece)])] + value1
+                except TypeError or ValueError:
+                    print(f"Error Code 9: Error on line {i+1}, variable value cannot be added to an integer.")
+                    sys.exit()
+            else:
+                value2 = 0
+                try:
+                    value2 = int(piece[comma+1:len(piece)])
+                except ValueError:
+                    try:
+                        value2 = float(piece[comma+1:len(piece)])
+                    except ValueError:
+                        print(f"Error Code 6: Error on line {i+1}, Invalid data type involved with addition.")
+                        sys.exit()
+                result = value1 + value2
+                
     else:
-        print(f"Error Code 5: Error on Missing ")
+        print(f"Error Code 5: Error on line {i+1}, missing ',' from addition.")
+        sys.exit()
+    if result is None:
+        print(f"Error Code 10: Error on line {i+1}. Undefined Error with addition. Please report how you got this error.")
+    return result
 
 inputcode = input("Please input the qwikbyte code: ")
 code = inputcode.split(";")
@@ -77,13 +119,14 @@ for i, piece in enumerate(code):
 for i, piece in enumerate(code):
     if type(piece) is not list:
         if piece[0] == "=":
-            vars, varValues = assignment(piece, vars, varValues)
+             assignment(piece, vars, varValues)
         elif piece[0] == "+":
-            vars, varValues = addition(piece, vars, varValues)
+            result = addition(piece, vars, varValues)
         elif piece[0:1] == ":=":
             vars, varValues = updateValue(piece, vars, varValues)
     else:
         pass
     print(piece)
+print(result)
 #print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
 #print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
