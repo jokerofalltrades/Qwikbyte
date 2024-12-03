@@ -19,7 +19,7 @@ def assignment(piece, vars, varValues):
         else:
             print(f"Error Code 1: Error on line {i+1}, already defined variable being redefined.")
             sys.exit()
-        if piece[comma+1] == "'" and piece[len(comma)] == "'":
+        if piece[comma+1] == "'" and piece[len(piece)-1] == "'":
             varValues.append(piece[comma+2:find_nth_overlapping(piece,"'",2)])
         elif piece[comma+1] == "#":
             if piece[comma+2:len(piece)] == "1":
@@ -48,9 +48,18 @@ def addition(piece, vars, varValues):
     if comma != -1:
         if piece[1:comma] in vars:
             pass
-        elif piece[1] == "'":
-            if piece[comma+1] == "'" or piece[comma+1:len(piece)] in vars:
-                pass
+        elif piece[1] == "'" and piece[comma-1] == "'":
+            if piece[comma+1] == "'" and piece[len(piece)-1] == "'":
+                try:
+                    result = piece[2:comma-1] + piece[comma+2:len(piece)-1]
+                except TypeError or ValueError:
+                    print(f"Error Code 12: Error on line{i+1}, unnkown error with string concatenation. Please report how you got this error.")
+            elif piece[comma+1:len(piece)] in vars:
+                try:
+                    result = piece[2:comma-1] + varValues[vars.index(piece[comma+1:len(piece)])]
+                except TypeError or ValueError:
+                    print(f"Error Code 11: Error on line {i+1}, variable value cannot be added to a string.")
+                    sys.exit()
             else:
                 print(f"Error Code 7: Error on line {i+1}, cannot add string to other data types. If you are adding to a variable then the varaible does not exist.")
                 sys.exit()
