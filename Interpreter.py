@@ -121,7 +121,8 @@ for i, piece in enumerate(code):
                 tempCodeStorage = piece.split("[")
         for v, subpiece in enumerate(tempCodeStorage):
             tempCodeStorage[v] = subpiece.replace("]","")
-            tempCodeStorage[v] = subpiece.replace("}","")
+            tempCodeStorage[v] = tempCodeStorage[v].replace("}","")
+        tempCodeStorage[:] = [subpiece for subpiece in tempCodeStorage if not subpiece == ""]
         code[i] = tempCodeStorage
     
         
@@ -133,9 +134,11 @@ for i, piece in enumerate(code):
             result = addition(piece, vars, varValues)
         elif piece[0:1] == ":=":
             vars, varValues = updateValue(piece, vars, varValues)
-    else:
-        pass
+    #else:
+        #for e, subpiece in enumerate(piece):
+            #if subpiece[0:1] == ":=":
+                #pass
     print(piece)
-print(result)
+#print(result)
 #print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
 #print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
