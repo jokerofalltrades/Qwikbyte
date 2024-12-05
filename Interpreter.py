@@ -13,22 +13,22 @@ def find_nth_overlapping(haystack, needle, n):
 
 def bracketsRemove(code):
     for i, piece in enumerate(code):
-    tempCodeStorage = []
-    if "[" in piece or "{" in piece:
-        if "[" in piece and "{" in piece:
-            tempCodeStorage = piece.split("[")
-            for e, subpiece in enumerate(tempCodeStorage):
-                    tempCodeStorage[e] = "".join(subpiece.split("{"))
-        else:
-            if "{" in piece:
-                tempCodeStorage = piece.split("{")
-            if "[" in piece:
+        tempCodeStorage = []
+        if "[" in piece or "{" in piece:
+            if "[" in piece and "{" in piece:
                 tempCodeStorage = piece.split("[")
-        for v, subpiece in enumerate(tempCodeStorage):
-            tempCodeStorage[v] = subpiece.replace("]","")
-            tempCodeStorage[v] = tempCodeStorage[v].replace("}","")
-        tempCodeStorage[:] = [subpiece for subpiece in tempCodeStorage if not subpiece == ""]
-        code[i] = tempCodeStorage
+                for e, subpiece in enumerate(tempCodeStorage):
+                        tempCodeStorage[e] = "".join(subpiece.split("{"))
+            else:
+                if "{" in piece:
+                    tempCodeStorage = piece.split("{")
+                if "[" in piece:
+                    tempCodeStorage = piece.split("[")
+            for v, subpiece in enumerate(tempCodeStorage):
+                tempCodeStorage[v] = subpiece.replace("]","")
+                tempCodeStorage[v] = tempCodeStorage[v].replace("}","")
+            tempCodeStorage[:] = [subpiece for subpiece in tempCodeStorage if not subpiece == ""]
+            code[i] = tempCodeStorage
 
 def assignment(piece, vars, varValues):
     comma = piece.find(",")
@@ -123,9 +123,9 @@ def addition(piece, vars, varValues):
 def identifyFuncToRun(piece, vars, varValues):
     additionUsed = 0
     if piece[0] == "=":
-        funcs.assignment(piece, vars, varValues)
+        assignment(piece, vars, varValues)
     elif piece[0] == "+":
-        addresult = funcs.addition(piece, vars, varValues)
+        addresult = addition(piece, vars, varValues)
         additionUsed = 1
     elif piece[0:1] == ":=":
         vars, varValues = updateValue(piece, vars, varValues)
