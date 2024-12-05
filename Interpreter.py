@@ -11,6 +11,25 @@ def find_nth_overlapping(haystack, needle, n):
         n -= 1
     return start
 
+def bracketsRemove(code):
+    for i, piece in enumerate(code):
+    tempCodeStorage = []
+    if "[" in piece or "{" in piece:
+        if "[" in piece and "{" in piece:
+            tempCodeStorage = piece.split("[")
+            for e, subpiece in enumerate(tempCodeStorage):
+                    tempCodeStorage[e] = "".join(subpiece.split("{"))
+        else:
+            if "{" in piece:
+                tempCodeStorage = piece.split("{")
+            if "[" in piece:
+                tempCodeStorage = piece.split("[")
+        for v, subpiece in enumerate(tempCodeStorage):
+            tempCodeStorage[v] = subpiece.replace("]","")
+            tempCodeStorage[v] = tempCodeStorage[v].replace("}","")
+        tempCodeStorage[:] = [subpiece for subpiece in tempCodeStorage if not subpiece == ""]
+        code[i] = tempCodeStorage
+
 def assignment(piece, vars, varValues):
     comma = piece.find(",")
     if comma != -1:
@@ -106,34 +125,15 @@ code = inputcode.split(";")
 for i, piece in enumerate(code):
     code[i] = ("".join(piece.split()))
 code.pop()
-
-for i, piece in enumerate(code):
-    tempCodeStorage = []
-    if "[" in piece or "{" in piece:
-        if "[" in piece and "{" in piece:
-            tempCodeStorage = piece.split("[")
-            for e, subpiece in enumerate(tempCodeStorage):
-                    tempCodeStorage[e] = "".join(subpiece.split("{"))
-        else:
-            if "{" in piece:
-                tempCodeStorage = piece.split("{")
-            if "[" in piece:
-                tempCodeStorage = piece.split("[")
-        for v, subpiece in enumerate(tempCodeStorage):
-            tempCodeStorage[v] = subpiece.replace("]","")
-            tempCodeStorage[v] = tempCodeStorage[v].replace("}","")
-        tempCodeStorage[:] = [subpiece for subpiece in tempCodeStorage if not subpiece == ""]
-        code[i] = tempCodeStorage
-    
         
 for i, piece in enumerate(code):
-    if type(piece) is not list:
-        if piece[0] == "=":
-             assignment(piece, vars, varValues)
-        elif piece[0] == "+":
-            result = addition(piece, vars, varValues)
-        elif piece[0:1] == ":=":
-            vars, varValues = updateValue(piece, vars, varValues)
+    #if type(piece) is not list:
+    if piece[0] == "=":
+        assignment(piece, vars, varValues)
+    elif piece[0] == "+":
+        result = addition(piece, vars, varValues)
+    elif piece[0:1] == ":=":
+        vars, varValues = updateValue(piece, vars, varValues)
     #else:
         #for e, subpiece in enumerate(piece):
             #if subpiece[0:1] == ":=":
