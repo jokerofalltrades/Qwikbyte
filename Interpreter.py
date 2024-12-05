@@ -120,6 +120,20 @@ def addition(piece, vars, varValues):
         print(f"Error Code 10: Error on line {i+1}. Undefined Error with addition. Please report how you got this error.")
     return result
 
+def identifyFuncToRun(piece, vars, varValues):
+    additionUsed = 0
+    if piece[0] == "=":
+        funcs.assignment(piece, vars, varValues)
+    elif piece[0] == "+":
+        addresult = funcs.addition(piece, vars, varValues)
+        additionUsed = 1
+    elif piece[0:1] == ":=":
+        vars, varValues = updateValue(piece, vars, varValues)
+    if additionUsed == 1:
+        return addresult
+    else:
+        return None
+
 inputcode = input("Please input the qwikbyte code: ")
 code = inputcode.split(";")
 for i, piece in enumerate(code):
@@ -128,17 +142,12 @@ code.pop()
         
 for i, piece in enumerate(code):
     #if type(piece) is not list:
-    if piece[0] == "=":
-        assignment(piece, vars, varValues)
-    elif piece[0] == "+":
-        result = addition(piece, vars, varValues)
-    elif piece[0:1] == ":=":
-        vars, varValues = updateValue(piece, vars, varValues)
+    addresult = identifyFuncToRun(piece, vars, varValues)
     #else:
         #for e, subpiece in enumerate(piece):
             #if subpiece[0:1] == ":=":
                 #pass
     print(piece)
-#print(result)
+#print(addresult)
 #print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
 #print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
