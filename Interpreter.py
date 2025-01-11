@@ -128,7 +128,8 @@ def identifyFuncToRun(piece, vars, varValues):
         addresult = addition(piece, vars, varValues)
         additionUsed = 1
     elif piece[0:1] == ":=":
-        vars, varValues = updateValue(piece, vars, varValues)
+        #vars, varValues = updateValue(piece, vars, varValues)
+        pass
     if additionUsed == 1:
         return addresult
     else:
