@@ -66,13 +66,48 @@ def addition(piece, vars, varValues):
     result = None
     if comma != -1:
         if piece[1:comma] in vars:
-            pass
+            varValue = varValues[vars.index(piece[1:comma])]
+            if type(varValue) is str:
+                if piece[comma+1] == "'" and piece[len(piece)-1] == "'":
+                    try:
+                        result = varValue + piece[comma+2:len(piece)-1]
+                    except TypeError or ValueError:
+                        print(f"Error Code 12: Error on line{i+1}, unnkown error with string concatenation. Please report how you got this error.")
+                        sys.exit()
+                elif piece[comma+1:len(piece)] in vars:
+                    try:
+                        result = varValue + varValues[vars.index(piece[comma+1:len(piece)])]
+                    except TypeError or ValueError:
+                        print(f"Error Code 13: Error on line {i+1}, variable type mismatch.")
+                        sys.exit()
+                else:
+                    print(f"Error Code 14: Error on line {i+1}, cannot add the variable type (string) to other data types. If you are adding to a variable then the varaible does not exist.")
+                    sys.exit()
+            elif type(varValue) is int or type(varValue) is float:
+                if piece[comma+1:len(piece)] in vars:
+                    try:
+                        result = varValue + varValues[vars.index(piece[comma+1:len(piece)])]
+                    except TypeError or ValueError:
+                        print(f"Error Code 15: Error on line {i+1}, variable type mismatch.")
+                        sys.exit()
+                else:
+                    value1 = 0
+                    try:
+                        value1 = int(piece[comma+1:len(piece)])
+                    except ValueError:
+                        try:
+                            value1 = float(piece[comma+1:len(piece)])
+                        except ValueError:
+                            print(f"Error Code 15: Error on line {i+1}, cannot add to the variable type (integer) with second input given.")
+                            sys.exit()
+                    result = varValue + value1
         elif piece[1] == "'" and piece[comma-1] == "'":
             if piece[comma+1] == "'" and piece[len(piece)-1] == "'":
                 try:
                     result = piece[2:comma-1] + piece[comma+2:len(piece)-1]
                 except TypeError or ValueError:
                     print(f"Error Code 12: Error on line{i+1}, unnkown error with string concatenation. Please report how you got this error.")
+                    sys.exit()
             elif piece[comma+1:len(piece)] in vars:
                 try:
                     result = piece[2:comma-1] + varValues[vars.index(piece[comma+1:len(piece)])]
@@ -120,6 +155,9 @@ def addition(piece, vars, varValues):
         print(f"Error Code 10: Error on line {i+1}. Undefined Error with addition. Please report how you got this error.")
     return result
 
+def updateValue(piece, vars, varValues):
+    pass
+
 def identifyFuncToRun(piece, vars, varValues):
     additionUsed = 0
     if piece[0] == "=":
@@ -128,7 +166,7 @@ def identifyFuncToRun(piece, vars, varValues):
         addresult = addition(piece, vars, varValues)
         additionUsed = 1
     elif piece[0:1] == ":=":
-        #vars, varValues = updateValue(piece, vars, varValues)
+        vars, varValues = updateValue(piece, vars, varValues)
         pass
     if additionUsed == 1:
         return addresult
