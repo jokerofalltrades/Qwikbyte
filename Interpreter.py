@@ -177,6 +177,7 @@ inputcode = input("Please input the qwikbyte code: ")
 code = inputcode.split(";")
 for i, piece in enumerate(code):
     code[i] = ("".join(piece.split()))
+    code[i] = code[i].replace("\s"," ")
 code.pop()
         
 for i, piece in enumerate(code):
@@ -187,6 +188,6 @@ for i, piece in enumerate(code):
             #if subpiece[0:1] == ":=":
                 #pass
     print(piece)
-#print(addresult)
+print(addresult)
 #print(f"Variables: {vars[0]}, {vars[1]}, {vars[2]}")
 #print(f"Variable Values: {varValues[0]}, {varValues[1]}, {varValues[2]}")
