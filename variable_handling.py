@@ -12,7 +12,7 @@ def assignment(line_num: int, line: str, vars: dict[Any, Any]) -> tuple[str, Any
     var_value = parse_var_value(line[comma_location+1:].strip())
 
     if var_name in vars:
-        error_handling.raise_error(4, line_num, "variable already exists. Use =@ to update the value")
+        error_handling.raise_error(4, line_num, "variable already exists. Use @= to update the value")
 
     if var_value is None:
         error_handling.raise_error(5, line_num, "variable declaration is missing correct syntax. use ' ' to define a string and a # to define true or false")
