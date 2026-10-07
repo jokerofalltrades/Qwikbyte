@@ -3,3 +3,6 @@
 @=y[+y,1];
 ()out,x;
 ()out,y;
+()out,(+1,y);
+()clear,y;
+()del,y;
